@@ -149,7 +149,73 @@ st.download_button(
     file_name='vix_ticket_analysis.csv',
     mime='text/csv'
 )
-# --- Summary Section ---
+
+# --- 📊 Dynamic Analysis Summary ---
+st.subheader("📊 Analysis Summary")
+
+# Gather key results
+date_from = data.index.min().date()
+date_to = data.index.max().date()
+selected_metric = deseason_method
+deseason_col = f'{deseason_method}_deseason'
+stl_period = period
+vix_selected = vix_metric
+corr_strength = abs(best_corr)
+lag_direction = "same day" if best_lag == 0 else f"{best_lag} day(s) later"
+
+# Interpret correlation strength
+if corr_strength > 0.5:
+    strength_desc = "strong"
+    emoji = "🔥"
+elif corr_strength > 0.3:
+    strength_desc = "moderate"
+    emoji = "📈"
+elif corr_strength > 0.1:
+    strength_desc = "weak"
+    emoji = "🫤"
+else:
+    strength_desc = "negligible"
+    emoji = "📉"
+
+# Generate insight
+if best_corr > 0.1:
+    insight = (
+        f"There is a {strength_desc} positive correlation ({best_corr:.3f}) between "
+        f"**{vix_selected}** and deseasonalized **{selected_metric}** when VIX leads by {best_lag} day(s). "
+        f"This suggests that higher market volatility tends to precede an increase in ticket volume {lag_direction}."
+    )
+elif best_corr < -0.1:
+    insight = (
+        f"There is a {strength_desc} negative correlation ({best_corr:.3f}) between "
+        f"**{vix_selected}** and deseasonalized **{selected_metric}**, meaning higher VIX values are linked to "
+        f"lower ticket activity {lag_direction}. This may indicate reduced reporting during volatile periods."
+    )
+else:
+    insight = (
+        f"No meaningful correlation was found (best = {best_corr:.3f}). "
+        f"Market volatility (VIX) does not appear to be strongly linked to ticket volume changes in this dataset."
+    )
+
+# Display summary
+st.markdown(f"""
+- **📅 Date Range**: {date_from} to {date_to}
+- **🔧 Deseasonalized Metric**: `{selected_metric}` using STL (period = {stl_period})
+- **📈 VIX Metric Tested**: `{vix_selected}`
+- **⏰ Best Lag**: {best_lag} day(s)
+- **🔗 Correlation Strength**: **{best_corr:.3f}** → {strength_desc} relationship {emoji}
+- **💡 Insight**: {insight}
+
+> 💬 **Conclusion**: {vix_selected} at lag {best_lag} explains approximately **{best_corr**2*100:.1f}%** of the variation in deseasonalized {selected_metric}.
+""")
+
+# Optional: Add a warning if low overlap or weak correlation
+if len(data) < 30:
+    st.warning(f"⚠️ Caution: Only {len(data)} overlapping days available — consider extending data coverage for more reliable results.")
+
+if abs(best_corr) < 0.2:
+    st.info("💡 Tip: Try other VIX metrics (e.g., HIGH) or check if ticket patterns respond to external events beyond market volatility.")
+
+# --- 📊 Dynamic Analysis Summary ---
 st.subheader("📘 How to Interpret This Analysis")
 
 st.markdown("""

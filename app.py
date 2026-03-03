@@ -149,6 +149,68 @@ st.download_button(
     file_name='vix_ticket_analysis.csv',
     mime='text/csv'
 )
+# --- Summary Section ---
+st.subheader("📘 How to Interpret This Analysis")
+
+st.markdown("""
+### 🔍 What This App Does
+
+This tool helps you explore whether **market volatility (measured by the VIX)** is related to **IT support ticket volume** in your organization.
+
+The VIX (Volatility Index) rises when markets are uncertain or fearful.  
+Your ticket data shows how busy your support team is each day.
+
+We're looking for patterns:  
+👉 *Do more tickets come in when the market is volatile?*  
+👉 *Does volatility today affect tickets tomorrow?*
+
+---
+
+### 📊 Understanding the Charts
+
+#### 1. **Correlation vs Lag (Line Chart)**
+- Shows how strongly the **VIX** correlates with ticket activity at different time lags.
+- A peak at **Lag 1** means:  
+  _"High VIX today → More tickets **tomorrow**"_
+- The higher the correlation (closer to 1 or -1), the stronger the link.
+
+#### 2. **Time Series Comparison (Line Chart)**
+- Plots **normalized VIX** and **de-seasonalized ticket count** on the same scale.
+- Look for peaks that line up — especially after applying the best lag.
+- If both lines rise and fall together, there may be a connection.
+
+#### 3. **Correlation Matrix (Heatmap)**
+- Shows pairwise correlations between all variables (e.g., VIX Close vs Ticket Count).
+- 🔥 **Red** = strong positive correlation  
+  🟦 **Blue** = negative or weak correlation
+- Helps spot which VIX metric (e.g., `HIGH` vs `CLOSE`) matters most.
+
+---
+
+### 🧹 Why Deseasonalize?
+- Ticket volume often follows weekly patterns (e.g., fewer tickets on weekends).
+- We remove these predictable patterns so we can focus on **unusual spikes** — like those possibly caused by market stress.
+
+---
+
+### 📌 Key Takeaway
+If the **best correlation is strong (e.g., > 0.25)** and happens at a **reasonable lag (0–2 days)**, it suggests:
+> _“Market volatility may be driving IT support demand.”_
+
+This could help you:
+- Forecast busy days
+- Allocate support staff proactively
+- Show business impact of external market events
+
+---
+
+### 🛠️ Tips for Use
+- Try different **VIX metrics** (e.g., `HIGH` might matter more than `CLOSE`)
+- Adjust the **STL period** if your data has longer cycles
+- Upload new data monthly to keep insights fresh
+
+**Note**: Correlation ≠ causation — but it’s a great starting point!
+""")
 
 # --- Footer ---
 st.markdown("---")

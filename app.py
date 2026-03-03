@@ -49,9 +49,36 @@ def load_data(vix_file, tickets_file):
         st.error(f"Error loading data: {e}")
         return None
 
-data = load_data(uploaded_vix, uploaded_tickets)
 if data is None:
     st.stop()
+
+st.success("✅ Data loaded and merged successfully!")
+
+st.write(f"📅 Date range: {data.index.min().date()} to {data.index.max().date()}")
+st.write(f"📊 {len(data)} overlapping days found.")
+
+# --- 🔍 Year Slicer ---
+st.subheader("📅 Select Years to Include in Analysis")
+
+available_years = sorted(data.index.year.unique())
+default_years = available_years  # Default: select all
+
+selected_years = st.multiselect(
+    "Choose years to include:",
+    options=available_years,
+    default=default_years
+)
+
+if not selected_years:
+    st.warning("Please select at least one year.")
+    st.stop()
+
+# Filter data by selected years
+data_filtered = data[data.index.year.isin(selected_years)]
+st.info(f"📈 Analyzing {len(data_filtered)} days from {', '.join(map(str, selected_years))}")
+
+# Use filtered data for all downstream analysis
+data = data_filtered  # Update data reference
 
 st.success("✅ Data loaded and merged successfully!")
 st.write(f"📅 Date range: **{data.index.min().date()}** to **{data.index.max().date()}**")

@@ -21,12 +21,16 @@ streamlit pandas numpy statsmodels matplotlib seaborn openpyxl
 
 ```bash
 pip install streamlit pandas numpy statsmodels matplotlib seaborn openpyxl
+```
 
 ## Usage
 
+```bash
 streamlit run app.py
+```
 
 ## Input Files
+
 The app requires two Excel files:
 
 1. VIX_history.xlsx
@@ -38,21 +42,25 @@ Columns: OPEN, HIGH, LOW, CLOSE
 
 Column: Date
 Columns: ticket_count, avg_ticket_count
-Key Features
-Year Filtering: Select specific years for analysis
-STL Deseasonalization: Optional weekly seasonality removal
-Lagged Correlation: Test correlation at 0-10 day lags
-Visualization: Time series plots and correlation heatmaps
-Automated Insights: Dynamic interpretation based on correlation strength
-Data Export: Download processed CSV results
+
+## Key Features
+- Year Filtering: Select specific years for analysis
+- STL Deseasonalization: Optional weekly seasonality removal
+- Lagged Correlation: Test correlation at 0-10 day lags
+- Visualization: Time series plots and correlation heatmaps
+- Automated Insights: Dynamic interpretation based on correlation strength
+- Data Export: Download processed CSV results
 
 ## Interpretation Guide
 
 ### Correlation Strength:
-|r| > 0.5: Strong relationship 🔥
-|r| > 0.3: Moderate relationship 📈
-|r| > 0.1: Weak relationship 🫤
-|r| < 0.1: Negligible 📉
+r > 0.5: Strong relationship 🔥
+
+r > 0.3: Moderate relationship 📈
+
+r > 0.1: Weak relationship 🫤
+
+r < 0.1: Negligible 📉
 
 ### Key Insight:
 A strong positive correlation at short lag (0-2 days) suggests market volatility may drive IT support demand, useful for forecasting and staffing decisions.
